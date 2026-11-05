@@ -1,0 +1,85 @@
+{
+  "app": {
+    "name": "LDY Laundry",
+    "staff": "Staff",
+    "skip": "Skip to main content"
+  },
+  "roles": {
+    "CUSTOMER": "Customer",
+    "FRONT_DESK": "Front Desk Officer",
+    "ATTENDANT": "Laundry Attendant",
+    "RIDER": "Delivery Rider",
+    "MANAGER": "Branch Manager",
+    "ADMIN": "System Administrator",
+    "AUDITOR": "Auditor"
+  },
+  "nav": {
+    "counter": "New order",
+    "collection": "Hand over",
+    "orders": "Orders",
+    "bookings": "Bookings",
+    "dispatch": "Delivery dispatch",
+    "corporate": "Corporate accounts",
+    "cashup": "Cash-up",
+    "scan": "Scan",
+    "batches": "Loads",
+    "machines": "Machines",
+    "rider": "Stops",
+    "inbox": "Inbox",
+    "approvals": "Approvals",
+    "reports": "Reports",
+    "audit": "Audit history",
+    "users": "Users",
+    "settings": "Settings",
+    "notifications": "Notifications",
+    "import": "Import data",
+    "myOrders": "My orders",
+    "book": "Book",
+    "profile": "Profile",
+    "track": "Track an order",
+    "overview": "Overview",
+    "work": "My work",
+    "alerts": "Alerts",
+    "me": "Me",
+    "home": "Home"
+  },
+  "action": {
+    "signIn": "Sign in",
+    "signOut": "Sign out",
+    "save": "Save changes",
+    "cancel": "Cancel",
+    "close": "Close",
+    "back": "Back",
+    "search": "Search",
+    "print": "Print",
+    "export": "Export CSV",
+    "retry": "Try again",
+    "stay": "Stay signed in",
+    "next": "Next",
+    "previous": "Previous"
+  },
+  "state": {
+    "loading": "Loading…",
+    "empty": "Nothing here yet.",
+    "error": "This could not be loaded."
+  },
+  "session": {
+    "idleWarning": "You have been inactive. You will be signed out in {{seconds}} seconds.",
+    "timedOut": "You were signed out after {{minutes}} minutes of inactivity.",
+    "ended": "Your session has ended. Sign in again to continue.",
+    "activeRole": "Active role",
+    "confirmTitle": "End your session?",
+    "confirmText": "You'll need to sign in again to continue.",
+    "confirmYes": "Sign out",
+    "confirmNo": "Stay signed in",
+    "offline": "You're offline. Changes will not be saved."
+  },
+  "search": {
+    "placeholder": "Search name, phone, order or tag",
+    "none": "No matches.",
+    "customers": "Customers",
+    "orders": "Orders",
+    "tags": "Tags",
+    "users": "Staff"
+  }
+}

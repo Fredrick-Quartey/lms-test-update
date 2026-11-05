@@ -1,0 +1,12 @@
+{
+  "name": "ldy-laundry",
+  "private": true,
+  "description": "Laundry Management System (NCH-SRS-LDY v2.0) — monorepo",
+  "scripts": {
+    "dev": "npm --prefix apps/frontend run dev",
+    "build": "npm --prefix apps/frontend run build",
+    "test": "npm --prefix apps/frontend test",
+    "lint": "npm --prefix apps/frontend run lint",
+    "typecheck": "npm --prefix apps/frontend run typecheck"
+  }
+}

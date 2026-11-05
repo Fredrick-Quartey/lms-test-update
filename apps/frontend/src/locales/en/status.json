@@ -1,0 +1,86 @@
+{
+  "order": {
+    "DRAFT": "Draft",
+    "RECEIVED": "Received",
+    "IN_SORTING": "In Sorting",
+    "IN_PROCESSING": "In Processing",
+    "QC_PASSED": "Passed",
+    "QC_FAILED": "Failed",
+    "PACKAGED": "Packaged",
+    "READY_FOR_PICKUP": "Ready for Pickup",
+    "OUT_FOR_DELIVERY": "Out for Delivery",
+    "COLLECTED": "Collected",
+    "DELIVERED": "Delivered",
+    "PAID": "Paid",
+    "RESOLVED": "Resolved",
+    "CANCELLED": "Cancelled",
+    "UNCLAIMED_DISPOSED": "Unclaimed – Disposed"
+  },
+  "item": {
+    "RECEIVED": "Received",
+    "IN_SORTING": "In a load",
+    "IN_PROCESSING": "In Processing",
+    "PROCESSING_COMPLETE": "Ready for check",
+    "QC_PASSED": "Check passed",
+    "QC_FAILED": "Check failed",
+    "REWORK": "Rework",
+    "PACKAGED": "Packaged",
+    "COLLECTED": "Collected",
+    "DELIVERED": "Delivered",
+    "CANCELLED": "Cancelled",
+    "DISCARDED": "Discarded"
+  },
+  "payment": {
+    "UNPAID": "Unpaid",
+    "PARTIAL": "Part paid",
+    "PAID": "Paid",
+    "ON_ACCOUNT": "On account"
+  },
+  "batch": {
+    "OPEN": "Filling",
+    "IN_PROCESSING": "Running",
+    "PROCESSING_COMPLETE": "Ready for check",
+    "CANCELLED": "Cancelled"
+  },
+  "machine": {
+    "AVAILABLE": "Available",
+    "IN_USE": "In Use",
+    "UNDER_MAINTENANCE": "Under Maintenance"
+  },
+  "cashup": {
+    "OPEN": "Open",
+    "BALANCED": "Balanced",
+    "FLAGGED": "Flagged",
+    "RECONCILED": "Reconciled"
+  },
+  "approval": {
+    "PENDING": "Waiting",
+    "APPROVED": "Approved",
+    "REJECTED": "Rejected"
+  },
+  "booking": {
+    "CONFIRMED": "Confirmed",
+    "COLLECTED": "Picked up",
+    "CANCELLED": "Cancelled",
+    "COMPLETED": "Completed"
+  },
+  "route": {
+    "PLANNED": "Planned",
+    "DEPARTED": "Departed",
+    "COMPLETED": "Completed"
+  },
+  "user": {
+    "ACTIVE": "Active",
+    "LOCKED": "Locked",
+    "DEACTIVATED": "Deactivated"
+  },
+  "damage": {
+    "OPEN": "Open",
+    "CLOSED": "Closed"
+  },
+  "notification": {
+    "QUEUED": "Queued",
+    "SENT": "Sent",
+    "FAILED": "Failed"
+  }
+}

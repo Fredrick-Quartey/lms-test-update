@@ -1,0 +1,36 @@
+# Local stack (Manual Phase Four). Only the frontend runs today; the FastAPI service and PostgreSQL
+# are owned by the backend/DevOps team and are left commented until apps/api has code.
+services:
+  frontend:
+    build:
+      context: .
+      dockerfile: apps/frontend/Dockerfile
+      args:
+        VITE_API_BASE_URL: /api/v1
+        VITE_USE_MOCKS: "true"   # set to "false" once the api service below is running
+    ports:
+      - "8080:80"
+    restart: unless-stopped
+
+  # api:
+  #   build: ./apps/api
+  #   env_file: ./apps/api/.env
+  #   ports: ["8000:8000"]
+  #   depends_on:
+  #     db:
+  #       condition: service_healthy
+  #
+  # db:
+  #   image: postgres:16-alpine
+  #   environment:
+  #     POSTGRES_DB: ldy
+  #     POSTGRES_USER: ldy
+  #     POSTGRES_PASSWORD: change-me   # use a real secret outside source control
+  #   volumes: ["pgdata:/var/lib/postgresql/data"]
+  #   healthcheck:
+  #     test: ["CMD-SHELL", "pg_isready -U ldy"]
+  #     interval: 5s
+  #     retries: 10
+#
+# volumes:
+#   pgdata:

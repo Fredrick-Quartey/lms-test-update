@@ -1,0 +1,8 @@
+{
+  "name": "@ldy/api-client",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "main": "src/index.ts",
+  "description": "Typed client and shared types for the LDY API (/api/v1). Replace hand-written types with openapi-typescript output once the FastAPI OpenAPI spec is published."
+}
