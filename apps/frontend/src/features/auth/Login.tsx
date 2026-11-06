@@ -4,12 +4,12 @@ import { useState, type FormEvent } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useMutation } from '@tanstack/react-query';
-import { KeyRound, Lock, LogIn, Mail, ShieldCheck, User } from 'lucide-react';
+import { KeyRound, Lock, Mail, User } from 'lucide-react';
 import { api, type Session } from '@ldy/api-client';
 import { useAuth } from '@/auth/session';
 import { HOME_FOR } from '@/auth/permissions';
 import { Alert, ErrorAlert, Field } from '@/components/ui';
-import { AuthLayout, type AuthTab } from './AuthLayout';
+import { AuthLayout } from './AuthLayout';
 
 export const SHOW_DEMO = import.meta.env.DEV || import.meta.env.VITE_SHOW_DEMO === 'true';
 
@@ -29,11 +29,6 @@ const CUSTOMER_DEMO = [
   ['0201112233', 'Esi Mensah'],
 ];
 
-export const CUSTOMER_TABS: AuthTab[] = [
-  { to: '/login', label: 'Log in' },
-  { to: '/signup', label: 'Sign up' },
-];
-const STAFF_TABS: AuthTab[] = [{ to: '/staff/login', label: 'Sign in' }];
 
 function LoginForm({ portal, preset = '' }: { portal: 'staff' | 'customer'; preset?: string }) {
   const { t } = useTranslation();
@@ -77,7 +72,7 @@ function LoginForm({ portal, preset = '' }: { portal: 'staff' | 'customer'; pres
             <Link to={portal === 'staff' ? '/staff/forgot' : '/forgot'} className="btn-link">Forgot password?</Link>
           </div>
           <ErrorAlert error={login.error} />
-          <button className="btn-primary w-full min-h-12 rounded-full text-base" disabled={login.isPending || !username || !password}>
+          <button className="btn-primary w-full min-h-13 rounded-full text-base" disabled={login.isPending || !username || !password}>
             {login.isPending ? 'Signing in…' : portal === 'staff' ? t('action.signIn') : 'Log in'}
           </button>
         </>
@@ -117,15 +112,13 @@ export function StaffLogin() {
   return (
     <AuthLayout
       image="staff"
-      tagline="Staff portal for the branch team."
-      tabs={STAFF_TABS}
-      badge={<ShieldCheck size={28} />}
+      tagline="Every load, every stage, on time."
       title="Staff sign in"
-      subtitle="Your role decides what you see. Accounts lock for 15 minutes after 5 wrong passwords."
+      subtitle="Use the email or phone your administrator set up for you."
       below={<DemoDrawer rows={STAFF_DEMO} onPick={setFill} note="Every demo account uses the password Password123!" />}
     >
       <LoginForm key={fill} portal="staff" preset={fill} />
-      <p className="mt-6 text-center text-sm text-slate">Need an account? Ask your System Administrator.</p>
+      <p className="mt-6 text-center text-sm text-slate">No account yet? Ask your System Administrator.</p>
     </AuthLayout>
   );
 }
@@ -135,11 +128,9 @@ export function CustomerLogin() {
   return (
     <AuthLayout
       image="customer"
-      tagline="Your laundry, tracked tag by tag."
-      tabs={CUSTOMER_TABS}
-      badge={<LogIn size={28} />}
-      title="Log in"
-      subtitle="Track your orders, see receipts and book a pickup."
+      tagline="Fresh, folded and right on time."
+      title="Welcome back"
+      subtitle="Log in to request a pickup and follow your orders."
       below={<DemoDrawer rows={CUSTOMER_DEMO} onPick={setFill} note="Customer demo accounts use the password Password123!" />}
     >
       <LoginForm key={fill} portal="customer" preset={fill} />
@@ -169,11 +160,11 @@ function ForgotPassword({ portal }: { portal: 'staff' | 'customer' }) {
   return (
     <AuthLayout
       image={portal}
-      tagline={portal === 'staff' ? 'Staff portal for the branch team.' : 'Your laundry, tracked tag by tag.'}
-      tabs={[{ to: back, label: portal === 'staff' ? 'Sign in' : 'Log in' }]}
-      badge={<KeyRound size={28} />}
-      title="Reset your password"
-      subtitle="We send a one-time code to the phone or email on the account. It works once and expires after 15 minutes."
+      tagline={portal === 'staff' ? 'Every load, every stage, on time.' : 'Fresh, folded and right on time.'}
+      title="Forgot your password?"
+      subtitle="We'll send a one-time code to the phone or email on your account. It works once and expires after 15 minutes."
+      homeTo={back}
+      homeLabel={portal === 'staff' ? 'Back to sign in' : 'Back to log in'}
     >
       {!sent ? (
         <form className="space-y-4" onSubmit={(e) => (e.preventDefault(), request.mutate())}>
@@ -196,7 +187,6 @@ function ForgotPassword({ portal }: { portal: 'staff' | 'customer' }) {
           <button className="btn-primary w-full min-h-12 rounded-full" disabled={!code || pw.length < 10 || reset.isPending}>Set new password</button>
         </form>
       )}
-      <p className="mt-6 text-center text-sm"><Link to={back} className="btn-link">Back to {portal === 'staff' ? 'sign in' : 'log in'}</Link></p>
     </AuthLayout>
   );
 }

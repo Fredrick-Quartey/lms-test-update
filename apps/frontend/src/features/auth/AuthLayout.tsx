@@ -1,137 +1,72 @@
 /**
- * One sign-in design for every portal (REDESIGN §6.1, D2): a centred split card, image panel on the left
- * with pill tabs that notch into the form, the form on the right. Not full screen. No Google button (F-04).
+ * One sign-in design for every portal (round 2): a box split in two. Left: a picture with a light sweeping
+ * across it (a licensed photo from public/images/auth/ when supplied, otherwise a drawn scene). Right: the form.
+ * Customers and staff get different pictures so each can tell at a glance whose page it is.
+ * On phones the picture becomes a short banner above the form. No Google button (F-04).
  */
 import { useState, type ReactNode } from 'react';
-import { Link, NavLink } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
 import { Logo } from '@/components/layout';
+import { MachinesScene, RailScene } from '@/features/portal/Scenes';
 
-export interface AuthTab {
-  to: string;
-  label: string;
-}
-
-export function AuthLayout({ image, tagline, tabs, badge, title, subtitle, children, below, homeTo = '/' }: {
+export function AuthLayout({ image, tagline, kicker, title, subtitle, children, below, homeTo = '/', homeLabel = 'Home' }: {
   image: 'customer' | 'staff';
   tagline: string;
-  tabs: AuthTab[];
-  badge: ReactNode;
+  kicker?: string;
   title: string;
   subtitle?: ReactNode;
   children: ReactNode;
   below?: ReactNode;
   homeTo?: string;
+  homeLabel?: string;
 }) {
   return (
-    <div className="min-h-dvh bg-mist bg-[radial-gradient(circle_at_1px_1px,rgb(24_70_200/.07)_1px,transparent_0)] [background-size:22px_22px]">
-      <div className="mx-auto flex min-h-dvh max-w-[1000px] flex-col px-4 py-5 sm:px-6 sm:py-8">
-        <div className="mb-4 flex items-center justify-between">
-          <Link to={homeTo} aria-label="Home"><Logo /></Link>
-          <Link to={homeTo} className="inline-flex min-h-10 items-center gap-1.5 rounded-full px-3 text-sm font-semibold text-blue hover:bg-white">
-            <ArrowLeft size={16} aria-hidden /> Home
-          </Link>
-        </div>
+    <div className="min-h-dvh bg-[radial-gradient(90%_60%_at_100%_0%,#dfe9ff_0%,transparent_60%),radial-gradient(70%_60%_at_0%_100%,#e2f6f8_0%,transparent_55%)] bg-mist">
+      <div className="mx-auto flex min-h-dvh max-w-[1040px] flex-col px-4 py-4 sm:px-6 sm:py-8">
         <main id="main" className="flex flex-1 items-center">
-          <div className="raised grid w-full overflow-hidden rounded-[24px] bg-white md:min-h-[560px] md:grid-cols-[42%_1fr]">
-            <ImagePanel image={image} tagline={tagline} tabs={tabs} />
-            <div className="flex flex-col justify-center px-5 py-7 sm:px-10 md:py-10">
-              {tabs.length > 1 && <MobileTabs tabs={tabs} />}
-              <div className="mx-auto w-full max-w-sm">
-                <div className="mb-6 text-center">
-                  <span className="mx-auto mb-3 flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-blue to-aqua text-white shadow-[0_10px_24px_-10px_rgb(24_70_200/.7)]" aria-hidden>
-                    {badge}
-                  </span>
-                  <h1 className="text-[26px] font-bold tracking-tight">{title}</h1>
-                  {subtitle && <p className="mt-1 text-sm text-slate">{subtitle}</p>}
-                </div>
-                {children}
+          <div className="grid w-full overflow-hidden rounded-[28px] bg-white shadow-[0_30px_80px_-40px_rgb(11_27_63/.45),0_2px_8px_-2px_rgb(11_27_63/.08)] md:min-h-[600px] md:grid-cols-[46%_1fr]">
+            <Picture image={image} tagline={tagline} kicker={kicker ?? (image === 'staff' ? 'Staff portal' : 'For customers')} />
+            <div className="flex flex-col px-5 pb-8 pt-5 sm:px-10 md:py-8">
+              <div className="flex items-center justify-between">
+                <Link to={homeTo} aria-label="LDY Laundry home" className="md:invisible"><Logo /></Link>
+                <Link to={homeTo} className="inline-flex min-h-10 items-center gap-1.5 rounded-full px-3 text-sm font-semibold text-slate hover:bg-mist hover:text-navy">
+                  <ArrowLeft size={16} aria-hidden /> {homeLabel}
+                </Link>
+              </div>
+              <div className="mx-auto flex w-full max-w-sm flex-1 flex-col justify-center py-6">
+                <h1 className="font-display rise-in text-[2rem] font-extrabold leading-tight text-navy">{title}</h1>
+                {subtitle && <p className="rise-in mt-2 text-slate" style={{ animationDelay: '60ms' }}>{subtitle}</p>}
+                <div className="rise-in mt-7" style={{ animationDelay: '120ms' }}>{children}</div>
               </div>
             </div>
           </div>
         </main>
-        {below && <div className="mx-auto mt-4 w-full max-w-[960px]">{below}</div>}
+        {below && <div className="mx-auto mt-4 w-full max-w-[1000px]">{below}</div>}
       </div>
     </div>
   );
 }
 
-/** Left panel: photo (owner-supplied, §13) with a blue overlay; until the file exists a drawn placeholder shows. */
-function ImagePanel({ image, tagline, tabs }: { image: 'customer' | 'staff'; tagline: string; tabs: AuthTab[] }) {
-  const [missing, setMissing] = useState(false);
+function Picture({ image, tagline, kicker }: { image: 'customer' | 'staff'; tagline: string; kicker: string }) {
+  const [photo, setPhoto] = useState(true);
   return (
-    <div className="relative h-36 overflow-hidden bg-blue-dark md:h-auto">
-      <Placeholder />
-      {!missing && (
+    <div className="sweep relative h-40 bg-blue-dark sm:h-48 md:h-auto">
+      {image === 'staff' ? <MachinesScene /> : <RailScene />}
+      {photo && (
         <picture>
           <source srcSet={`/images/auth/${image}.webp`} type="image/webp" />
-          <img
-            src={`/images/auth/${image}.jpg`}
-            alt=""
-            width={900}
-            height={1200}
-            className="absolute inset-0 h-full w-full object-cover"
-            onError={() => setMissing(true)}
-          />
+          <img src={`/images/auth/${image}.jpg`} alt="" width={900} height={1200} className="drift absolute inset-0 h-full w-full object-cover" onError={() => setPhoto(false)} />
         </picture>
       )}
-      <div aria-hidden className="absolute inset-0 bg-gradient-to-b from-blue-dark/55 via-blue-dark/50 to-blue-dark/85" />
-      <div className="relative flex h-full flex-col justify-end p-5 md:justify-between md:p-8">
-        <p className="hidden max-w-[16rem] text-2xl font-bold leading-snug text-white md:block">{tagline}</p>
-        <p className="text-sm font-semibold text-white md:hidden">{tagline}</p>
-        {tabs.length > 0 && (
-          <nav aria-label="Sign-in options" className="absolute right-0 top-1/2 hidden -translate-y-1/2 flex-col items-end gap-3 md:flex">
-            {tabs.map((t) => (
-              <NavLink key={t.to} to={t.to} end className={({ isActive }) => `relative block min-w-[8.5rem] py-3 pl-7 pr-8 text-right text-sm font-bold ${isActive ? 'rounded-l-full bg-white text-navy' : 'mr-4 rounded-full text-white/85 ring-1 ring-white/35 hover:bg-white/10 hover:text-white'}`}>
-                {({ isActive }) => (
-                  <>
-                    {isActive && (
-                      <>
-                        <span aria-hidden className="absolute -top-5 right-0 h-5 w-5 bg-[radial-gradient(circle_at_0_0,transparent_19.5px,#fff_20px)]" />
-                        <span aria-hidden className="absolute -bottom-5 right-0 h-5 w-5 bg-[radial-gradient(circle_at_0_100%,transparent_19.5px,#fff_20px)]" />
-                      </>
-                    )}
-                    {t.label}
-                  </>
-                )}
-              </NavLink>
-            ))}
-          </nav>
-        )}
+      <div aria-hidden className="absolute inset-0 bg-gradient-to-t from-[#06102a]/90 via-[#06102a]/25 to-transparent" />
+      <div className="relative z-[3] flex h-full flex-col justify-between p-5 md:p-9">
+        <Link to="/" aria-label="LDY Laundry home" className="hidden md:block"><Logo light /></Link>
+        <div>
+          <p className="text-xs font-bold uppercase tracking-[0.16em] text-[#8fe3ec]">{kicker}</p>
+          <p className="font-display mt-1 max-w-[18rem] text-xl font-extrabold leading-snug text-white md:mt-3 md:text-[1.9rem]">{tagline}</p>
+        </div>
       </div>
     </div>
-  );
-}
-
-function MobileTabs({ tabs }: { tabs: AuthTab[] }) {
-  return (
-    <nav aria-label="Sign-in options" className="mx-auto mb-6 flex w-full max-w-sm rounded-full bg-mist p-1 md:hidden">
-      {tabs.map((t) => (
-        <NavLink key={t.to} to={t.to} end className={({ isActive }) => `flex-1 rounded-full py-2.5 text-center text-sm font-bold ${isActive ? 'bg-white text-navy shadow-sm' : 'text-slate'}`}>
-          {t.label}
-        </NavLink>
-      ))}
-    </nav>
-  );
-}
-
-/** Decorative stand-in for the photo: soft concentric arcs and bubbles in the brand blues. */
-function Placeholder() {
-  return (
-    <svg aria-hidden className="absolute inset-0 h-full w-full" viewBox="0 0 400 600" preserveAspectRatio="xMidYMid slice">
-      <defs>
-        <linearGradient id="ph-bg" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0" stopColor="#1846c8" />
-          <stop offset="1" stopColor="#0b1b3f" />
-        </linearGradient>
-      </defs>
-      <rect width="400" height="600" fill="url(#ph-bg)" />
-      {[260, 210, 160, 110].map((r, i) => (
-        <circle key={r} cx="60" cy="430" r={r} fill="none" stroke="#19a7b8" strokeOpacity={0.18 + i * 0.08} strokeWidth="18" />
-      ))}
-      {[[300, 120, 26], [340, 200, 12], [250, 70, 9], [320, 300, 18], [200, 160, 7]].map(([x, y, r]) => (
-        <circle key={`${x}-${y}`} cx={x} cy={y} r={r} fill="#ffffff" fillOpacity="0.12" stroke="#ffffff" strokeOpacity="0.35" />
-      ))}
-    </svg>
   );
 }

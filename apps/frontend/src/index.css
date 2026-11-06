@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Plus+Jakarta+Sans:wght@400;600;700&display=swap');
 @import 'tailwindcss';
 
 /*
@@ -23,6 +23,7 @@
   --color-warning-wash: #fff4d6;
   --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
   --font-ticket: 'Plus Jakarta Sans', system-ui, sans-serif;
+  --font-display: 'Bricolage Grotesque', 'Plus Jakarta Sans', system-ui, sans-serif;
   --radius-field: 12px;
   --radius-card: 16px;
   --radius-sheet: 24px;
@@ -191,4 +192,71 @@ h3 {
   body {
     background: white;
   }
+}
+
+/* ---------- Home and sign-in scenes (round 2) ---------- */
+.font-display {
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  letter-spacing: -0.02em;
+}
+@keyframes ldy-spin {
+  to { transform: rotate(360deg); }
+}
+@keyframes ldy-rise {
+  0% { transform: translateY(0) scale(0.6); opacity: 0; }
+  12% { opacity: 0.9; }
+  100% { transform: translateY(-62vh) scale(1.15); opacity: 0; }
+}
+@keyframes ldy-slosh {
+  0%, 100% { transform: translateX(-4%) rotate(-2deg); }
+  50% { transform: translateX(4%) rotate(2deg); }
+}
+@keyframes ldy-sway {
+  0%, 100% { transform: rotate(-2.5deg); }
+  50% { transform: rotate(2.5deg); }
+}
+@keyframes ldy-drift {
+  0% { transform: scale(1.06) translate3d(-1.5%, 0, 0); }
+  100% { transform: scale(1.12) translate3d(1.5%, -1%, 0); }
+}
+@keyframes ldy-sweep {
+  0%, 55% { transform: translateX(-130%) skewX(-18deg); }
+  85%, 100% { transform: translateX(230%) skewX(-18deg); }
+}
+@keyframes ldy-rise-in {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: none; }
+}
+.spin-slow { animation: ldy-spin 28s linear infinite; transform-origin: center; transform-box: fill-box; }
+.spin-slower { animation: ldy-spin 46s linear infinite reverse; transform-origin: center; transform-box: fill-box; }
+.slosh { animation: ldy-slosh 7s ease-in-out infinite; transform-origin: center; transform-box: fill-box; }
+.sway { animation: ldy-sway 5.5s ease-in-out infinite; transform-origin: top center; transform-box: fill-box; }
+.drift { animation: ldy-drift 18s ease-in-out infinite alternate; }
+.bubble {
+  position: absolute;
+  bottom: -40px;
+  border-radius: 9999px;
+  background: radial-gradient(circle at 32% 30%, rgb(255 255 255 / 0.85), rgb(255 255 255 / 0.12) 42%, rgb(255 255 255 / 0.04) 70%);
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.35);
+  animation: ldy-rise linear infinite;
+}
+/* the light that sweeps across the sign-in picture */
+.sweep { position: relative; overflow: hidden; isolation: isolate; }
+.sweep::after {
+  content: '';
+  position: absolute;
+  inset: -10% auto -10% 0;
+  width: 45%;
+  background: linear-gradient(90deg, transparent, rgb(255 255 255 / 0.28), transparent);
+  animation: ldy-sweep 6.5s ease-in-out infinite;
+  pointer-events: none;
+  z-index: 2;
+}
+.rise-in { animation: ldy-rise-in 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+/* WCAG 2.2.2: one Pause button stops every moving thing inside */
+.motion-paused *,
+.motion-paused *::after,
+.motion-paused *::before {
+  animation-play-state: paused !important;
 }

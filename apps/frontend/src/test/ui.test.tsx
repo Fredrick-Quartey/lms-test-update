@@ -166,18 +166,32 @@ describe('Redesign round 1', () => {
     expect(screen.queryByText('Notifications', { selector: 'p' })).not.toBeInTheDocument();
   });
 
-  it('D5 / OQ16: sign-up step 2 needs an address and the consent box before Create account works', async () => {
+  it('Sign-up goes one step at a time: name and phone, optional email, address, then password and consent', async () => {
     const { Signup } = await import('@/features/portal/Signup');
     const user = userEvent.setup();
     renderApp(<Routes><Route path="/signup" element={<Signup />} /><Route path="/me/welcome" element={<p>welcome page</p>} /></Routes>, { route: '/signup' });
+    // step 1: a wrong phone stops here
     await user.type(screen.getByLabelText(/full name/i), 'Kofi Mensah');
-    await user.type(screen.getByLabelText(/phone number/i), '0244777111');
-    await user.type(screen.getByLabelText(/^password/i), 'LongEnough123');
-    await user.type(screen.getByLabelText(/confirm password/i), 'LongEnough123');
+    await user.type(screen.getByLabelText(/phone number/i), '12');
     await user.click(screen.getByRole('button', { name: 'Next' }));
-    const create = await screen.findByRole('button', { name: 'Create account' });
-    expect(create).toBeDisabled();
-    await user.type(screen.getByLabelText(/pickup and delivery address/i), 'House 4, Labone, near the school');
+    expect(screen.getByText('Step 1 of 4')).toBeInTheDocument();
+    await user.clear(screen.getByLabelText(/phone number/i));
+    await user.type(screen.getByLabelText(/phone number/i), '0244777111');
+    await user.click(screen.getByRole('button', { name: 'Next' }));
+    // step 2: email is optional, so the button says Skip
+    expect(await screen.findByText('Step 2 of 4')).toBeInTheDocument();
+    await user.click(screen.getByRole('button', { name: 'Skip' }));
+    // step 3 (OQ16): address is required
+    expect(await screen.findByText('Step 3 of 4')).toBeInTheDocument();
+    await user.click(screen.getByRole('button', { name: 'Next' }));
+    expect(screen.getByText('Step 3 of 4')).toBeInTheDocument();
+    await user.type(screen.getByLabelText(/^address/i), 'House 4, Labone, near the school');
+    await user.click(screen.getByRole('button', { name: 'Next' }));
+    // step 4: password, then consent unlocks Create account (NFR-C4)
+    expect(await screen.findByText('Step 4 of 4')).toBeInTheDocument();
+    await user.type(screen.getByLabelText(/^password/i), 'LongEnough123');
+    await user.type(screen.getByLabelText(/type it again/i), 'LongEnough123');
+    const create = screen.getByRole('button', { name: 'Create account' });
     expect(create).toBeDisabled();
     await user.click(screen.getByRole('checkbox'));
     expect(create).toBeEnabled();
